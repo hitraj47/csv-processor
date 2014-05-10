@@ -67,11 +67,23 @@ public class CSVFilter {
 		JOptionPane.showMessageDialog(frame, _message, _title, JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	/**
+	 * This method creates the new file path/save location for the filtered file.
+	 * @param _file The old file that is being filtered
+	 * @return
+	 */
 	private static String createNewFileName(File _file) {
-		// TODO Auto-generated method stub
-		return null;
+		String oldPath = _file.getAbsolutePath();
+		String newPath = oldPath.substring(0, oldPath.length()-4);
+		newPath = newPath + "_filtered.csv";
+		return newPath;
 	}
-
+	
+	/**
+	 * This method filters the array list and removes all non-unique records, unless there is a business name
+	 * @param _records The list of all records
+	 * @return
+	 */
 	private static ArrayList<String[]> filterRecords(ArrayList<String[]> _records) {
 		ArrayList<String[]> filteredRecords = _records;
 		// the location of the post code
