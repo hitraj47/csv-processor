@@ -9,6 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 /**
@@ -17,14 +20,14 @@ import java.util.ArrayList;
  */
 /**
  * @author Raj
- *
+ * 
  */
 public class CSVFile {
-	
-	private File sourceFile;
+
+	private RandomAccessFile sourceFile;
 	private String separator;
 	private ArrayList<String[]> records;
-	
+
 	/**
 	 * Default constructor. Sets the default separator to a comma
 	 */
@@ -32,14 +35,16 @@ public class CSVFile {
 		// Use comma as default separator
 		this.separator = ",";
 	}
-	
+
 	/**
 	 * Constructor that takes a file argument.
-	 * @param _file The CSV file
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
+	 * 
+	 * @param _file
+	 *            The CSV file
+	 * @throws IOException
+	 * @throws FileNotFoundException
 	 */
-	public CSVFile(File _file) throws IOException {
+	public CSVFile(RandomAccessFile _file) throws IOException {
 		this();
 		this.sourceFile = _file;
 		open();
@@ -48,14 +53,15 @@ public class CSVFile {
 	/**
 	 * @return the sourceFile
 	 */
-	public File getSourceFile() {
+	public RandomAccessFile getSourceFile() {
 		return sourceFile;
 	}
 
 	/**
-	 * @param _sourceFile the sourceFile to set
+	 * @param _sourceFile
+	 *            the sourceFile to set
 	 */
-	public void setSourceFile(File _sourceFile) {
+	public void setSourceFile(RandomAccessFile _sourceFile) {
 		this.sourceFile = _sourceFile;
 	}
 
@@ -67,7 +73,8 @@ public class CSVFile {
 	}
 
 	/**
-	 * @param _separator the separator to set
+	 * @param _separator
+	 *            the separator to set
 	 */
 	public void setSeparator(String _separator) {
 		this.separator = _separator;
@@ -81,39 +88,52 @@ public class CSVFile {
 	}
 
 	/**
-	 * @param _records the records to set
+	 * @param _records
+	 *            the records to set
 	 */
 	public void setRecords(ArrayList<String[]> _records) {
 		this.records = _records;
 	}
-	
+
 	/**
-	 * Open the file on disk and set the records ArrayList.
-	 * Make sure sourceFile is set.
+	 * Open the file on disk and set the records ArrayList. Make sure sourceFile
+	 * is set.
+	 * 
 	 * @throws IOException
 	 */
 	private void open() throws IOException {
-		BufferedReader reader = new BufferedReader(new FileReader(this.sourceFile));
-		
-		String line;
-		this.records = new ArrayList<String[]>();
-		while ( (line = reader.readLine()) != null) {
-			String[] record = line.split(this.separator);
-			this.records.add(record);
+		FileChannel inChannel = this.sourceFile.getChannel();
+		ByteBuffer buffer = ByteBuffer.allocate(1024);
+
+		StringBuilder lineBuilder = new StringBuilder("");
+
+		while (inChannel.read(buffer) > 0) {
+			buffer.flip();
+			for (int i = 0; i < buffer.limit(); i++) {
+				char c = (char) buffer.get();
+				if (c == '\n') {
+					records.add(lineBuilder.toString().split(this.separator));
+					lineBuilder = new StringBuilder("");
+				} else {
+					lineBuilder.append(c);
+				}
+			}
+			buffer.clear(); // do something with the data and clear/compact it.
 		}
-		
-		// close resource
-		reader.close();
+		inChannel.close();
+		this.sourceFile.close();
 	}
-	
+
 	/**
-	 * This method writes the records to the specified file. Overwrites if file already exists.
+	 * This method writes the records to the specified file. Overwrites if file
+	 * already exists.
+	 * 
 	 * @param _file
-	 * @throws FileNotFoundException 
+	 * @throws FileNotFoundException
 	 */
 	public void saveFile(File _file) throws FileNotFoundException {
 		PrintWriter writer = new PrintWriter(_file);
-		
+
 		for (String[] record : this.records) {
 			for (String r : record) {
 				writer.print(r);
@@ -121,7 +141,7 @@ public class CSVFile {
 			}
 			writer.println("");
 		}
-		
+
 		// close resource
 		writer.close();
 	}
