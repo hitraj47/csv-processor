@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.JOptionPane;
 
@@ -56,7 +57,12 @@ public class CSVFilter {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * This method shows an information dialog.
+	 * @param _title The title of the dialog.
+	 * @param _message The message to be displayed.
+	 */
 	private static void showSuccessDialog(String _title, String _message) {
 		JOptionPane.showMessageDialog(frame, _message, _title, JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -66,9 +72,30 @@ public class CSVFilter {
 		return null;
 	}
 
-	private static ArrayList<String[]> filterRecords(ArrayList<String[]> records) {
-		// TODO Auto-generated method stub
-		return null;
+	private static ArrayList<String[]> filterRecords(ArrayList<String[]> _records) {
+		ArrayList<String[]> filteredRecords = _records;
+		// the location of the post code
+		int postCodeLocation = 0;
+		
+		// the location of the business name (cell K)
+		int businessNameLocation = 10;
+		
+		// array list to keep track of unique post codes
+		ArrayList<String> uniquePostCodes = new ArrayList<String>();
+		
+		Iterator<String[]> it = filteredRecords.iterator();
+		while (it.hasNext()) {
+			String[] record = it.next();
+			if ( !uniquePostCodes.contains(record[postCodeLocation]) ) {
+				uniquePostCodes.add(record[postCodeLocation]);
+			} else {
+				if ( record[businessNameLocation].equals("")) {
+					it.remove();
+				}
+			}
+		}
+		
+		return filteredRecords;
 	}
 
 	/**
