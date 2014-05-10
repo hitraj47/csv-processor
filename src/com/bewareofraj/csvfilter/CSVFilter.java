@@ -1,5 +1,5 @@
 /**
- * 
+ * This class is responsible filtering and saving the new records.
  */
 package com.bewareofraj.csvfilter;
 
@@ -116,7 +116,21 @@ public class CSVFilter {
 	 * @param _message The message to be displayed
 	 * @param _buttonTitle The title for the dismiss button
 	 */
-	private static void showErrorDialog(String _title, String _message) {
+	public static void showErrorDialog(String _title, String _message) {
 		JOptionPane.showMessageDialog(frame, _message, _title, JOptionPane.ERROR_MESSAGE);
+	}
+	
+	/**
+	 * Determines if the extension on the file is .csv
+	 * @param _file
+	 * @return
+	 */
+	public static boolean isCsvFile(File _file) {
+		String extension = _file.getName().substring(_file.getName().lastIndexOf(".") + 1);
+		if (extension.equalsIgnoreCase("csv")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
