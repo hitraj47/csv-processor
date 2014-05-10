@@ -7,6 +7,7 @@ import java.awt.EventQueue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -45,8 +46,11 @@ public class CSVFilter {
 	 */
 	public static void filterCsvFile(File _file) {
 		try {
-			CSVFile csvFile = new CSVFile(_file);
+			RandomAccessFile inputFile = new RandomAccessFile(_file.getAbsolutePath(), "r");
+			CSVFile csvFile = new CSVFile(inputFile);
+			
 			csvFile.setRecords(filterRecords(csvFile.getRecords()));
+			
 			String newFileName = createNewFileName(_file);
 			File filteredFile = new File(newFileName);
 			csvFile.saveFile(filteredFile);
