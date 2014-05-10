@@ -39,7 +39,7 @@ public class CSVFile {
 	 * @throws IOException 
 	 * @throws FileNotFoundException 
 	 */
-	public CSVFile(File _file) throws FileNotFoundException, IOException {
+	public CSVFile(File _file) throws IOException {
 		this();
 		this.sourceFile = _file;
 		open();
@@ -90,9 +90,9 @@ public class CSVFile {
 	/**
 	 * Open the file on disk and set the records ArrayList.
 	 * Make sure sourceFile is set.
-	 * @throws IOException, FileNotFoundException 
+	 * @throws IOException
 	 */
-	private void open() throws IOException, FileNotFoundException {
+	private void open() throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader(this.sourceFile));
 		
 		String line;
