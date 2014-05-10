@@ -96,6 +96,7 @@ public class CSVFile {
 		BufferedReader reader = new BufferedReader(new FileReader(this.sourceFile));
 		
 		String line;
+		this.records = new ArrayList<String[]>();
 		while ( (line = reader.readLine()) != null) {
 			String[] record = line.split(this.separator);
 			this.records.add(record);

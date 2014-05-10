@@ -51,6 +51,7 @@ public class CSVFilter {
 			File filteredFile = new File(newFileName);
 			csvFile.saveFile(filteredFile);
 			showSuccessDialog("File Saved", "The file was successuflly filtered and saved to: \n" + filteredFile.getAbsolutePath());
+			System.exit(0);
 		} catch (FileNotFoundException e) {
 			showErrorDialog("File Not Found", "Could not find the file you specified.");
 		} catch (IOException e) {
