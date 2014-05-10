@@ -106,6 +106,8 @@ public class CSVFile {
 		ByteBuffer buffer = ByteBuffer.allocate(1024);
 
 		StringBuilder lineBuilder = new StringBuilder("");
+		
+		this.records = new ArrayList<String[]>();
 
 		while (inChannel.read(buffer) > 0) {
 			buffer.flip();
