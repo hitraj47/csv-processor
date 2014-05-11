@@ -3,16 +3,15 @@
  */
 package com.bewareofraj.util;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * @author Raj
@@ -137,15 +136,17 @@ public class CSVFile {
 		PrintWriter writer = new PrintWriter(_file);
 
 		for (String[] record : this.records) {
-			for (String r : record) {
-				writer.print(r);
-				writer.print(this.separator);
+			for (int i = 0; i < record.length; i++) {
+				writer.print(record[i]);
+				if (i < record.length-1) {
+					writer.print(this.separator);
+				}
 			}
-			writer.println("");
 		}
 
 		// close resource
 		writer.close();
+		System.out.println(records.get(0)[15]);
 	}
 
 }

@@ -62,7 +62,7 @@ public class CSVFilter {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * This method shows an information dialog.
 	 * @param _title The title of the dialog.
