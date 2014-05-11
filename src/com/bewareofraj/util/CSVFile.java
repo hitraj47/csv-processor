@@ -146,7 +146,6 @@ public class CSVFile {
 
 		// close resource
 		writer.close();
-		System.out.println(records.get(0)[15]);
 	}
 
 }
